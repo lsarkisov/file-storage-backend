@@ -30,6 +30,10 @@ public class FileStorageService {
         }
     }
 
+    public Path getLocation() {
+        return this.fileStorageLocation;
+    }
+
     public String storeFile(MultipartFile file) {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 

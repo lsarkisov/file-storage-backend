@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -71,6 +72,26 @@ public class DBFileStorageService {
                 .path("/download/")
                 .path(fileId)
                 .toUriString();
+    }
+
+    public List<UploadFileResponse> updateFile(String  id, String newName) {
+        Path path = fileStorageService.getLocation();
+
+        DBFile file = dbFileRepository.findById(id).get();
+        Resource oldPath = fileStorageService.loadFileAsResource(file.getFileName());
+
+        File oldFileName = null;
+        try {
+            oldFileName = new File(oldPath.getURI());
+            oldFileName.renameTo(new File(path + "/" + newName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        file.setFileName(newName);
+        dbFileRepository.save(file);
+
+        return getAllFiles();
     }
 
     public List<UploadFileResponse> removeFile(String  id) {

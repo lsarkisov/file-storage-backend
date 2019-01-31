@@ -48,6 +48,11 @@ public class FileController {
         return fetchAllFiles();
     }
 
+    @PutMapping("/update")
+    public List<UploadFileResponse> updateFile(@RequestParam("fileId") String  id, @RequestParam("newName") String  newName) {
+        return DBFileStorageService.updateFile(id, newName);
+    }
+
     @DeleteMapping("/delete")
     public List<UploadFileResponse> deleteFile(@RequestParam("fileId") String id) {
         return DBFileStorageService.removeFile(id);
