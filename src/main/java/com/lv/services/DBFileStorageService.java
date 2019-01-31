@@ -6,11 +6,13 @@ import com.lv.exceptions.MyFileNotFoundException;
 import com.lv.models.DBFile;
 import com.lv.repository.DBFileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +75,16 @@ public class DBFileStorageService {
 
     public List<UploadFileResponse> removeFile(String  id) {
         DBFile file = dbFileRepository.findById(id).get();
+        Resource path = fileStorageService.loadFileAsResource(file.getFileName());
+
+        File fileName = null;
+        try {
+            fileName = new File(path.getURI());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        fileName.delete();
+
         dbFileRepository.delete(file);
         return getAllFiles();
     }
