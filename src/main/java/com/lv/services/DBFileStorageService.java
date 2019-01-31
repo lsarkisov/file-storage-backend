@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +36,7 @@ public class DBFileStorageService {
 
             DBFile dbFile = new DBFile(fileName, file.getContentType(), file.getBytes().length);
 
-            // Store file in dir /upload
+            // Store file in dir "/upload"
             fileStorageService.storeFile(file);
 
             return dbFileRepository.save(dbFile);
@@ -68,5 +69,11 @@ public class DBFileStorageService {
                 .path("/download/")
                 .path(fileId)
                 .toUriString();
+    }
+
+    public List<UploadFileResponse> removeFile(String  id) {
+        DBFile file = dbFileRepository.findById(id).get();
+        dbFileRepository.delete(file);
+        return getAllFiles();
     }
 }

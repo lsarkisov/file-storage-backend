@@ -48,11 +48,10 @@ public class FileController {
         return fetchAllFiles();
     }
 
-//    @DeleteMapping("/file/delete/{fileId:.}")
-//    public List<UploadFileResponse> deleteFile(@RequestParam("fileId") String id) {
-//
-//        return fetchAllFiles();
-//    }
+    @DeleteMapping("/delete")
+    public List<UploadFileResponse> deleteFile(@RequestParam("fileId") String id) {
+        return DBFileStorageService.removeFile(id);
+    }
 
 }
 
